@@ -1,7 +1,7 @@
 Puppet smartd Module
 ====================
 
-[![Build Status](https://travis-ci.org/jhoblitt/puppet-smartd.png)](https://travis-ci.org/jhoblitt/puppet-smartd)
+[![Build Status](https://travis-ci.org/LeLutin/puppet-smartd.png)](https://travis-ci.org/LeLutin/puppet-smartd)
 
 #### Table of Contents
 
@@ -53,6 +53,10 @@ migrated into the
 ### Forked
 
 This is a fork of
+[`jhoblitt-smartd`](https://github.com/jhoblitt/puppet-smartd) to continue
+maintenance since activity has stopped on the previously mentioned repository.
+
+`jhoblitt-smartd` was itself a fork of
 [`csail/smartd`](http://tig.csail.mit.edu/wiki/TIG/PuppetAtCSAIL) that was
 initially made primarily to fix support of probing `SATA` drives behind a LSI
 Megaraid controllers.  The author has been aware of the fork and it's hoped
@@ -390,7 +394,7 @@ This module is versioned according to the [Semantic Versioning
 Support
 -------
 
-Please log tickets and issues at [github](https://github.com/jhoblitt/puppet-smartd/issues)
+Please log tickets and issues at [github](https://github.com/LeLutin/puppet-smartd/issues)
 
 
 See Also
