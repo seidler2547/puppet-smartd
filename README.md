@@ -50,6 +50,11 @@ It is planned that in a future release the `megaraid` specific facts will be
 migrated into the
 [`puppet-megaraid`](https://github.com/jhoblitt/puppet-megaraid) module.
 
+If your hard drives are hiding behind an LSI Fusion MPT constroller, you can
+obtain SMART information by specifying to this module (with the `devices`
+parameter to monitor devices `/dev/sgN` which correspond to drive `N` behind
+the controller.
+
 ### Forked
 
 This is a fork of
