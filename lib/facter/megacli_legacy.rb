@@ -10,6 +10,6 @@ Facter.add(:megacli_legacy) do
 
     # Modern version assumed from changelog at
     # http://www.lsi.com/downloads/Public/RAID%20Controllers/RAID%20Controllers%20Common%20Files/Linux%20MegaCLI%208.07.10.txt
-    versioncmp(megacli_version, '8.02.16') == -1
+    Puppet::Util::Package.versioncmp(megacli_version, '8.02.16') == -1
   end
 end
