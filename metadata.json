@@ -1,6 +1,6 @@
 {
   "name": "LeLutin-smartd",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "author": "Joshua Hoblitt <jhoblitt@cpan.org>",
   "summary": "Manages the smartmontools package including the smartd daemon",
   "license": "MIT",
