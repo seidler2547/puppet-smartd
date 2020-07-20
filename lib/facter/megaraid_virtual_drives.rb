@@ -21,7 +21,7 @@ Facter.add(:megaraid_virtual_drives) do
     devices.each do |dev|
       vendor = Facter.value("blockdevice_#{dev}_vendor")
       case vendor
-      when 'LSI', 'SMC', 'DELL', 'FTS'
+      when 'LSI', 'SMC', 'DELL', 'FTS', 'AVAGO'
         vds << dev
       end
     end
