@@ -175,9 +175,7 @@ class smartd (
     }
   }
 
-  package { $package_name:
-    ensure => $pkg_ensure,
-  }
+  ensure_packages([$package_name], { ensure => $pkg_ensure })
 
   if $srv_manage {
     service { $service_name:
