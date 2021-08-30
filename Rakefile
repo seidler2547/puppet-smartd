@@ -12,7 +12,7 @@ if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.2')
   RuboCop::RakeTask.new
 end
 
-PuppetSyntax.exclude_paths = ['spec/fixtures/**/*']
+PuppetSyntax.exclude_paths = ['spec/fixtures/**/*', 'vendor/**/*']
 
 PuppetLint::RakeTask.new :lint do |config|
   config.pattern          = 'manifests/**/*.pp'
