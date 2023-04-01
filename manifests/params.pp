@@ -24,8 +24,8 @@ class smartd::params {
   $exec_script        = false
   $default_options    = undef
 
-  $version_string = $::smartmontools_version ? {
-    undef   => '0.0',
+  $version_string = defined('$::smartmontools_version') ? {
+    false   => '0.0',
     default => $::smartmontools_version,
   }
 
