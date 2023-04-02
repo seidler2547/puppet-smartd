@@ -11,20 +11,3 @@ if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.2')
   require 'rubocop/rake_task'
   RuboCop::RakeTask.new
 end
-
-PuppetSyntax.exclude_paths = ['spec/fixtures/**/*', 'vendor/**/*']
-
-PuppetLint::RakeTask.new :lint do |config|
-  config.pattern          = 'manifests/**/*.pp'
-  config.fail_on_warnings = true
-end
-
-task :travis_lint do
-  sh 'travis-lint'
-end
-
-task :default => [
-  :validate,
-  :lint,
-  :spec,
-]
