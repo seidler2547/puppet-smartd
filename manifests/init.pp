@@ -1,117 +1,64 @@
-# == Class: smartd
+# smartd/manifests/init.pp
 #
-# Manages the smartmontools package including the smartd daemon
+# - Copyright (C) 2012 MIT Computer Science & Artificial Intelligence Laboratory
+# - Copyright (C) 2013-2015 Joshua Hoblitt <jhoblitt@cpan.org>
+# - Copyright (C) 2015-2023 Gabriel Filion <gabster@lelutin.ca>
 #
+# @summary Manage the smartmontools package including the smartd daemon
 #
-# === Parameters
+# @example basic usage
+#   class { 'smartd': }
 #
-# All parameters are optional.
-#
-# [*ensure*]
-#  `String`
-#
-#   Standard Puppet ensure semantics (and supports `purged` state if your
-#   package provider does). Valid values are:
+# @param ensure
+#   Standard Puppet ensure semantics (supports `purged` state if your
+#   package provider does). Defaults to `present`. Valid values are:
 #   `present`,`latest`,`absent`,`purged`
-#
-#   defaults to: `present`
-#
-# [*package_name*]
-#   `String`
-#
+# @param package_name
 #   Name of the smartmontools package.
-#
-#   defaults to: `smartmontools`
-#
-# [*service_name*]
-#  `String`
-#
+# @param service_name
 #   Name of the smartmontools monitoring daemon.
-#
-#   defaults to: `smartd`
-#
-# [*service_ensure*]
-#  `String`
-#
-#   State of the smartmontools monitoring daemon. Valid values are:
+# @param service_ensure
+#   State of the smartmontools monitoring daemon. Defaults to `running`. Valid
+#   values are:
 #   `running`,`stopped`
-#
-#   defaults to: `running`
-#
-# [*manage_service*]
-#  `Bool`
-#
-#   State whether or not this puppet module should manage the service.
+# @param manage_service
+#   Set this to false to disable managing the smartmontools service.
 #   This parameter is disregarded when $ensure = absent|purge.
-#
-#   defaults to: `true`
-#
-# [*config_file*]
-#   `String`
-#
+# @param config_file
 #   Path to the configuration file for the monitoring daemon.
-#
-#   defaults to: (OS-specific)
-#
-# [*devicescan*]
-#   `Bool`
-#
+# @param devicescan
 #   Sets the `DEVICESCAN` directive in the smart daemon config file.  Tells the
 #   smart daemon to automatically detect all of the SMART-capable drives in the
-#   system.
-#
-#   defaults to: `true`
-#
-# [*devicescan_options*]
-#   `String`
-#
-#   Passes options to the `DEVICESCAN` directive.  `devicescan` must equal true
+#   system. Defaults to`true`.
+# @param devicescan_options
+#   String of options to the `DEVICESCAN` directive. `devicescan` must equal true
 #   for this to have any effect.
-#
-#   defaults to: `undef`
-#
-# [*devices*]
-#   `Array` of `Hash`
-#
-#   Explicit list of raw block devices to check.  Eg.
+# @param devices
+#   `Array` of `Hash`. Explicit list of raw block devices to check.  Eg.
 #    [{ device => '/dev/sda', options => '-I 194' }]
-#
-#   defaults to: `[]`
-#
-# [*mail_to*]
-#   `String`
-#
-#   Smart daemon notifcation email address.
-#
-#   defaults to: `root`
-#
-# [*warning_schedule*]
-#   `String`
-#
-#   Smart daemon problem mail notification frequency. Valid values are:
-#   `daily`,`once`,`diminishing`, `exec`
-#
+# @param mail_to
+#   Local username or email address used by smart daemon for notifcations.
+#   Defaults to `root`
+# @param warning_schedule
+#   Smart daemon problem mail notification frequency. Defaults to `daily`.
+#   Valid values are: `daily`,`once`,`diminishing`, `exec`
 #   Note that if the value `exec` is used, then the parameter `exec_script`
 #   *must* be specified.
-#
-#   defaults to: `daily`
-#
-# [*exec_script*]
-#   `String`
-#
-#   Script that should be executed if warning_schedule is set to `exec`.
-#
-#   defaults to: `undef`
-#
-# === Authors
-#
-# MIT Computer Science & Artificial Intelligence Laboratory
-# Joshua Hoblitt <jhoblitt@cpan.org>
-#
-# === Copyright
-#
-# Copyright 2012 Massachusetts Institute of Technology
-# Copyright (C) 2013 Joshua Hoblitt
+# @param exec_script
+#   Path to the script that should be executed if `warning_schedule` is set to
+#   `exec`.
+# @param enable_default
+#   Set this to false to disable the `DEFAULT` directive in the `smartd.conf`
+#   file. The `DEFAULT` directive was added in the 5.43 release of
+#   smartmontools.
+#   If this parameter is set to false, then the values from the `mail_to` and
+#   `warning_schedule` parameters are set o nthe `DEVICESCAN` directive (if
+#   enabled) instead of the (absent) `DEFAULT` directive.
+# @param default_options
+#   String of additional arguments to be set on the `DEFAULT` directive.
+#   If `enable_default` is set to false, the value for this parameter will be
+#   set on the `DEVICESCAN` directive (if enabled) instead of the (absent)
+#   `DEFAULT` directive.
 #
 class smartd (
   $ensure             = 'present',
