@@ -5,12 +5,9 @@ AllCops:
   TargetRubyVersion: '2.7'
   NewCops: enable
   Exclude:
-    # Ignore HTML related things
-    - '**/*.erb'
-    # Ignore vendored gems
-    - 'vendor/**/*'
-    # Ignore code from test fixtures
-    - 'spec/fixtures/**/*'
+    - pkg/**/*
+    - spec/fixtures/**/*
+    - vendor/**/*
 
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
