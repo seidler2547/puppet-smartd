@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe 'smartd::params', :type => :class do
+describe 'smartd::params', type: :class do
   shared_examples 'osfamily' do |family|
-    let(:facts) { { :osfamily => family } }
+    let(:facts) { { osfamily: family } }
 
     it { is_expected.to contain_class('smartd::params') }
   end
@@ -22,14 +22,14 @@ describe 'smartd::params', :type => :class do
   describe 'unsupported osfamily' do
     let :facts do
       {
-        :osfamily        => 'Solaris',
-        :operatingsystem => 'Solaris',
+        osfamily: 'Solaris',
+        operatingsystem: 'Solaris',
       }
     end
 
-    it 'should fail' do
-      expect { is_expected.to contain_class('smartd::params') }.
-        to raise_error(Puppet::Error, /not supported on Solaris/)
+    it 'fails on unsupported OS' do
+      expect { it.is_expected.to contain_class('smartd::params') }
+        .to raise_error(Puppet::Error, %r{not supported on Solaris})
     end
   end
 end

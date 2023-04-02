@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe 'smartd', :type => :fact do
+describe 'smartd', type: :fact do
   before(:each) { Facter.clear }
 
-  context 'not in path' do
+  context 'when smartd not in path' do
     it do
       Facter::Util::Resolution.stubs(:which).with('smartd').returns(nil)
       expect(Facter.fact(:smartd).value).to be_nil
     end
   end
 
-  context 'in path' do
+  context 'when smartd in path' do
     it do
       Facter::Util::Resolution.stubs(:which).with('smartd').returns('/usr/sbin/smartd')
       expect(Facter.fact(:smartd).value).to eq('/usr/sbin/smartd')

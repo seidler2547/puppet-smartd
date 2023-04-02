@@ -1,5 +1,5 @@
 Facter.add(:megaraid_physical_drives) do
-  confine :kernel => 'Linux'
+  confine kernel: 'Linux'
 
   setcode do
     megacli           = Facter.value(:megacli)
@@ -11,8 +11,9 @@ Facter.add(:megaraid_physical_drives) do
     pds = []
     list = Facter::Util::Resolution.exec("#{megacli} -PDList -aALL -NoLog")
     next if list.nil?
+
     list.each_line do |line|
-      pds.push(Regexp.last_match(1)) if line =~ /^Device Id:\s+(\d+)/
+      pds.push(Regexp.last_match(1)) if line =~ %r{^Device Id:\s+(\d+)}
     end
 
     # sort the device IDs numerically on the assumption that they are always

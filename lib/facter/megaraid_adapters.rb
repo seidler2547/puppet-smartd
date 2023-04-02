@@ -6,7 +6,7 @@
 # against.
 
 Facter.add(:megaraid_adapters) do
-  confine :kernel => 'Linux'
+  confine kernel: 'Linux'
 
   setcode do
     megacli = Facter.value(:megacli)
@@ -15,6 +15,6 @@ Facter.add(:megaraid_adapters) do
 
     # -adpCount sends it's entire output to the stderr
     count = Facter::Util::Resolution.exec("#{megacli} -adpCount -NoLog 2>&1")
-    count =~ /Controller Count:\s+(\d+)\./ ? Regexp.last_match(1) : '0'
+    count =~ %r{Controller Count:\s+(\d+)\.} ? Regexp.last_match(1) : '0'
   end
 end

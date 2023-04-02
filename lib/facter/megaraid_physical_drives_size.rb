@@ -1,5 +1,5 @@
 Facter.add(:megaraid_physical_drives_size) do
-  confine :kernel => 'Linux'
+  confine kernel: 'Linux'
 
   setcode do
     megacli           = Facter.value(:megacli)
@@ -11,8 +11,9 @@ Facter.add(:megaraid_physical_drives_size) do
     sizes = []
     list = Facter::Util::Resolution.exec("#{megacli} -PDList -aALL -NoLog")
     next if list.nil?
+
     list.each_line do |line|
-      sizes.push(Regexp.last_match(1)) if line =~ /Raw Size: ([\.\d]+ [A-Z]?B)/
+      sizes.push(Regexp.last_match(1)) if line =~ %r{Raw Size: ([.\d]+ [A-Z]?B)}
     end
 
     sizes.join(',')

@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'megacli', :type => :fact do
+describe 'megacli', type: :fact do
   before(:each) { Facter.clear }
 
-  context 'on linux' do
-    context 'not in path' do
+  context 'when on linux' do
+    context 'with megacli not in path' do
       it do
         Facter.fact(:kernel).stubs(:value).returns('Linux')
         Facter::Util::Resolution.stubs(:which).with('MegaCli').returns(nil)
@@ -13,7 +13,7 @@ describe 'megacli', :type => :fact do
       end
     end
 
-    context 'in path mixed case' do
+    context 'with megacli in path mixed case' do
       it do
         Facter.fact(:kernel).stubs(:value).returns('Linux')
         Facter::Util::Resolution.stubs(:which).with('MegaCli').returns('/usr/bin/MegaCli')
@@ -21,7 +21,7 @@ describe 'megacli', :type => :fact do
       end
     end
 
-    context 'in path lower case' do
+    context 'with megacli in path lower case' do
       it do
         Facter.fact(:kernel).stubs(:value).returns('Linux')
         Facter::Util::Resolution.stubs(:which).with('MegaCli').returns(nil)

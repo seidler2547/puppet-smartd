@@ -5,7 +5,7 @@
 # so long as it's on the same controller.  We only support one
 # controller for now.
 Facter.add(:megaraid_virtual_drives) do
-  confine :kernel => 'Linux'
+  confine kernel: 'Linux'
 
   setcode do
     megacli           = Facter.value(:megacli)
@@ -27,6 +27,7 @@ Facter.add(:megaraid_virtual_drives) do
     end
 
     next if vds.empty?
+
     vds.sort.join(',')
   end
 end

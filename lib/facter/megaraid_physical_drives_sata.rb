@@ -1,5 +1,5 @@
 Facter.add(:megaraid_physical_drives_sata) do
-  confine :kernel => 'Linux'
+  confine kernel: 'Linux'
 
   setcode do
     megacli           = Facter.value(:megacli)
@@ -14,8 +14,8 @@ Facter.add(:megaraid_physical_drives_sata) do
 
     dev_id = nil
     list.each_line do |line|
-      dev_id = Regexp.last_match(1) if line =~ /^Device Id:\s+(\d+)/
-      if line =~ /^PD Type:\s+(\w+)/
+      dev_id = Regexp.last_match(1) if line =~ %r{^Device Id:\s+(\d+)}
+      if line =~ %r{^PD Type:\s+(\w+)}
         type = Regexp.last_match(1)
         pds.push(dev_id) if type == 'SATA'
       end
