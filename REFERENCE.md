@@ -9,6 +9,11 @@
 * [`smartd`](#smartd): Manage the smartmontools package including the smartd daemon
 * [`smartd::params`](#smartd--params): == Class: smartd::params  This class should be considered private.  === Authors  MIT Computer Science & Artificial Intelligence Laboratory Jo
 
+### Data types
+
+* [`Smartd::Ensure`](#Smartd--Ensure): Valid values for ensure parameter
+* [`Smartd::Warning_schedule`](#Smartd--Warning_schedule): Type of warning schedule, used for -M option of devicescan
+
 ## Classes
 
 ### <a name="smartd"></a>`smartd`
@@ -48,7 +53,7 @@ The following parameters are available in the `smartd` class:
 
 ##### <a name="-smartd--ensure"></a>`ensure`
 
-Data type: `Any`
+Data type: `Smartd::Ensure`
 
 Standard Puppet ensure semantics (supports `purged` state if your
 package provider does). Defaults to `present`. Valid values are:
@@ -58,7 +63,7 @@ Default value: `'present'`
 
 ##### <a name="-smartd--package_name"></a>`package_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Name of the smartmontools package.
 
@@ -66,7 +71,7 @@ Default value: `$smartd::params::package_name`
 
 ##### <a name="-smartd--service_name"></a>`service_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 Name of the smartmontools monitoring daemon.
 
@@ -74,7 +79,7 @@ Default value: `$smartd::params::service_name`
 
 ##### <a name="-smartd--service_ensure"></a>`service_ensure`
 
-Data type: `Any`
+Data type: `Enum['running', 'stopped']`
 
 State of the smartmontools monitoring daemon. Defaults to `running`. Valid
 values are:
@@ -84,7 +89,7 @@ Default value: `$smartd::params::service_ensure`
 
 ##### <a name="-smartd--manage_service"></a>`manage_service`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Set this to false to disable managing the smartmontools service.
 This parameter is disregarded when $ensure = absent|purge.
@@ -93,7 +98,7 @@ Default value: `$smartd::params::manage_service`
 
 ##### <a name="-smartd--config_file"></a>`config_file`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
 Path to the configuration file for the monitoring daemon.
 
@@ -101,7 +106,7 @@ Default value: `$smartd::params::config_file`
 
 ##### <a name="-smartd--devicescan"></a>`devicescan`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Sets the `DEVICESCAN` directive in the smart daemon config file.  Tells the
 smart daemon to automatically detect all of the SMART-capable drives in the
@@ -111,7 +116,7 @@ Default value: `$smartd::params::devicescan`
 
 ##### <a name="-smartd--devicescan_options"></a>`devicescan_options`
 
-Data type: `Any`
+Data type: `String`
 
 String of options to the `DEVICESCAN` directive. `devicescan` must equal true
 for this to have any effect.
@@ -120,7 +125,7 @@ Default value: `$smartd::params::devicescan_options`
 
 ##### <a name="-smartd--devices"></a>`devices`
 
-Data type: `Any`
+Data type: `Array[Hash]`
 
 `Array` of `Hash`. Explicit list of raw block devices to check.  Eg.
  [{ device => '/dev/sda', options => '-I 194' }]
@@ -129,7 +134,7 @@ Default value: `$smartd::params::devices`
 
 ##### <a name="-smartd--mail_to"></a>`mail_to`
 
-Data type: `Any`
+Data type: `String`
 
 Local username or email address used by smart daemon for notifcations.
 Defaults to `root`
@@ -138,7 +143,7 @@ Default value: `$smartd::params::mail_to`
 
 ##### <a name="-smartd--warning_schedule"></a>`warning_schedule`
 
-Data type: `Any`
+Data type: `Smartd::Warning_schedule`
 
 Smart daemon problem mail notification frequency. Defaults to `daily`.
 Valid values are: `daily`,`once`,`diminishing`, `exec`
@@ -149,7 +154,7 @@ Default value: `$smartd::params::warning_schedule`
 
 ##### <a name="-smartd--exec_script"></a>`exec_script`
 
-Data type: `Any`
+Data type: `Optional[String]`
 
 Path to the script that should be executed if `warning_schedule` is set to
 `exec`.
@@ -158,7 +163,7 @@ Default value: `$smartd::params::exec_script`
 
 ##### <a name="-smartd--enable_default"></a>`enable_default`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Set this to false to disable the `DEFAULT` directive in the `smartd.conf`
 file. The `DEFAULT` directive was added in the 5.43 release of
@@ -171,7 +176,7 @@ Default value: `$smartd::params::enable_default`
 
 ##### <a name="-smartd--default_options"></a>`default_options`
 
-Data type: `Any`
+Data type: `String`
 
 String of additional arguments to be set on the `DEFAULT` directive.
 If `enable_default` is set to false, the value for this parameter will be
@@ -195,4 +200,21 @@ Joshua Hoblitt <jhoblitt@cpan.org>
 
 Copyright 2012 Massachusetts Institute of Technology
 Copyright (C) 2013 Joshua Hoblitt
+
+## Data types
+
+### <a name="Smartd--Ensure"></a>`Smartd::Ensure`
+
+Valid values for ensure parameter
+
+Alias of `Enum['present', 'latest', 'absent', 'purged']`
+
+### <a name="Smartd--Warning_schedule"></a>`Smartd::Warning_schedule`
+
+Type of warning schedule, used for -M option of devicescan
+
+* **See also**
+  * https://linux.die.net/man/5/smartd.conf
+
+Alias of `Enum['daily', 'once', 'diminishing', 'exec']`
 
