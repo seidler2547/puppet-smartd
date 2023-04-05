@@ -69,13 +69,20 @@ describe 'megaraid_virtual_drives', type: :fact do
           blockdevice_sdk_model: 'PRAID EP400i',
           blockdevice_sdk_size: '299439751168',
           blockdevice_sdk_vendor: 'FTS',
+          blockdevices: 'sda,sdb,sdc,sdd,sde,sdf,sdg,sdh,sdi,sdj,sdk',
         }
 
-        facts.each { |k, v| Facter.add(k) { setcode { v } } }
+        facts.each do |k, v|
+          # First add facts if they don't exist.
+          Facter.add(k) { setcode { v } }
+          # The above won't override values for facts that already exist so to
+          # make sure that our test runs on our mock values we'll need to mock
+          # fact values now that we know they all exist.
+          allow(Facter.fact(k)).to receive(:value).and_return(v)
+        end
       end
 
       it do
-        allow(Facter.fact(:blockdevices)).to receive(:value).and_return('sda,sdb,sdc,sdd,sde,sdf,sdg,sdh,sdi,sdj,sdk')
         allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
         allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
         allow(Facter.fact(:megaraid_adapters)).to receive(:value).and_return('1')
