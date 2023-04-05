@@ -6,8 +6,8 @@ describe 'megaraid_physical_drives_size', type: :fact do
   describe 'when on linux' do
     context 'with megacli not in path' do
       it do
-        Facter.fact(:kernel).stubs(:value).returns('Linux')
-        Facter.fact(:megacli).stubs(:value).returns(nil)
+        allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
+        allow(Facter.fact(:megacli)).to receive(:value).and_return(nil)
 
         expect(Facter.fact(:megaraid_physical_drives_size).value).to be_nil
       end
@@ -15,21 +15,20 @@ describe 'megaraid_physical_drives_size', type: :fact do
 
     context 'with megacli broken' do
       it do
-        Facter.fact(:kernel).stubs(:value).returns('Linux')
-        Facter.fact(:megacli).stubs(:value).returns('/usr/bin/MegaCli')
-        Facter.fact(:megaraid_adapters).stubs(:value).returns(nil)
+        allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
+        allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
+        allow(Facter.fact(:megaraid_adapters)).to receive(:value).and_return(nil)
 
         expect(Facter.fact(:megaraid_physical_drives_size).value).to be_nil
       end
 
       it do
-        Facter.fact(:kernel).stubs(:value).returns('Linux')
-        Facter.fact(:megacli).stubs(:value).returns('/usr/bin/MegaCli')
-        Facter.fact(:megaraid_adapters).stubs(:value).returns('1')
-        Facter::Util::Resolution
-          .stubs(:exec)
+        allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
+        allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
+        allow(Facter.fact(:megaraid_adapters)).to receive(:value).and_return('1')
+        allow(Facter::Util::Resolution).to receive(:exec)
           .with('/usr/bin/MegaCli -PDList -aALL -NoLog')
-          .returns(nil)
+          .and_return(nil)
 
         expect(Facter.fact(:megaraid_physical_drives_size).value).to be_nil
       end
@@ -37,9 +36,9 @@ describe 'megaraid_physical_drives_size', type: :fact do
 
     context 'with no adapters' do
       it do
-        Facter.fact(:kernel).stubs(:value).returns('Linux')
-        Facter.fact(:megacli).stubs(:value).returns('/usr/bin/MegaCli')
-        Facter.fact(:megaraid_adapters).stubs(:value).returns('0')
+        allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
+        allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
+        allow(Facter.fact(:megaraid_adapters)).to receive(:value).and_return('0')
 
         expect(Facter.fact(:megaraid_physical_drives_size).value).to be_nil
       end
@@ -61,13 +60,12 @@ describe 'megaraid_physical_drives_size', type: :fact do
       end
 
       it do
-        Facter.fact(:kernel).stubs(:value).returns('Linux')
-        Facter.fact(:megacli).stubs(:value).returns('/usr/bin/MegaCli')
-        Facter.fact(:megaraid_adapters).stubs(:value).returns('1')
-        Facter::Util::Resolution
-          .stubs(:exec)
+        allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
+        allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
+        allow(Facter.fact(:megaraid_adapters)).to receive(:value).and_return('1')
+        allow(Facter::Util::Resolution).to receive(:exec)
           .with('/usr/bin/MegaCli -PDList -aALL -NoLog')
-          .returns(File.read(fixtures('megacli', 'pdlistaall')))
+          .and_return(File.read(fixtures('megacli', 'pdlistaall')))
         expect(Facter.fact(:megaraid_physical_drives_size).value).to eq(sizes)
       end
     end
@@ -76,7 +74,7 @@ describe 'megaraid_physical_drives_size', type: :fact do
 
   context 'when not on linux' do
     it do
-      Facter.fact(:kernel).stubs(:value).returns('Solaris')
+      allow(Facter.fact(:kernel)).to receive(:value).and_return('Solaris')
 
       expect(Facter.fact(:megaraid_physical_drives_size).value).to be_nil
     end

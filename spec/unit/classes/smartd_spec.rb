@@ -165,7 +165,7 @@ describe 'smartd', type: :class do
         let(:params) { { ensure: 'badvalue' } }
 
         it 'fails with unsupported value' do
-          it.is_expected.to raise_error(Puppet::Error, %r{unsupported value of $ensure: badvalue})
+          is_expected.to compile.and_raise_error(%r{validate_re(): "badvalue" does not match})
         end
       end
 
@@ -195,14 +195,14 @@ describe 'smartd', type: :class do
         let(:params) { { service_ensure: 'badvalue' } }
 
         it 'fails with unexpected value' do
-          it.is_expected.to raise_error(Puppet::Error, %r{unsupported value of})
+          is_expected.to compile.and_raise_error(%r{validate_re(): "badvalue" does not match})
         end
       end
 
       describe 'devicescan =>' do
         context 'when using default value' do
           it do
-            it.is_expected.to contain_file('/etc/smartd.conf')
+            is_expected.to contain_file('/etc/smartd.conf')
               .with_ensure('present')
               .with_content(%r{^DEVICESCAN$})
           end
@@ -213,7 +213,7 @@ describe 'smartd', type: :class do
           let(:params) { { devicescan: true } }
 
           it do
-            it.is_expected.to contain_file('/etc/smartd.conf')
+            is_expected.to contain_file('/etc/smartd.conf')
               .with_ensure('present')
               .with_content(%r{^DEVICESCAN$})
           end
@@ -224,7 +224,7 @@ describe 'smartd', type: :class do
             end
 
             it 'has the same arguments as DEFAULT would have' do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .with_content(%r{^DEVICESCAN -m root -M daily$})
             end
@@ -236,7 +236,7 @@ describe 'smartd', type: :class do
           let(:params) { { devicescan: false } }
 
           it do
-            it.is_expected.to contain_file('/etc/smartd.conf')
+            is_expected.to contain_file('/etc/smartd.conf')
               .with_ensure('present')
               .without_content(%r{^DEVICESCAN$})
           end
@@ -247,7 +247,7 @@ describe 'smartd', type: :class do
           let(:params) { { devicescan: 'foo' } }
 
           it 'fails because of non-boolean' do
-            it.is_expected.to raise_error(Puppet::Error, %r{is not a boolean..})
+            is_expected.to compile.and_raise_error(%r{is not a boolean..})
           end
         end
       end
@@ -366,7 +366,7 @@ describe 'smartd', type: :class do
         let(:params) { { warning_schedule: 'badvalue' } }
 
         it 'fails on badvalue' do
-          it.is_expected.to raise_error(Puppet::Error, %r{$warning_schedule must be either daily, once, or diminishing.})
+          is_expected.to compile.and_raise_error(%r{$warning_schedule must be either daily, once, diminishing, or exec.})
         end
       end
 
@@ -378,7 +378,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .with_content(%r{DEFAULT -m root -M daily})
             end
@@ -390,7 +390,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .without_content(%r{DEFAULT -m root -M daily})
                 .with_content(%r{DEVICESCAN -m root -M daily})
@@ -403,7 +403,7 @@ describe 'smartd', type: :class do
           let(:params) { { enable_default: true } }
 
           it do
-            it.is_expected.to contain_file('/etc/smartd.conf')
+            is_expected.to contain_file('/etc/smartd.conf')
               .with_ensure('present')
               .with_content(%r{DEFAULT -m root -M daily})
           end
@@ -413,7 +413,7 @@ describe 'smartd', type: :class do
           let(:params) { { enable_default: false } }
 
           it do
-            it.is_expected.to contain_file('/etc/smartd.conf')
+            is_expected.to contain_file('/etc/smartd.conf')
               .with_ensure('present')
               .without_content(%r{DEFAULT -m root -M daily})
               .with_content(%r{DEVICESCAN -m root -M daily})
@@ -424,7 +424,7 @@ describe 'smartd', type: :class do
           let(:params) { { enable_default: 'foo' } }
 
           it 'fails on non-boolean' do
-            it.is_expected.to raise_error(Puppet::Error, %r{is not a boolean..})
+            is_expected.to compile.and_raise_error(%r{is not a boolean..})
           end
         end
       end
@@ -440,7 +440,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .with_content(%r{DEFAULT -m root -M daily})
             end
@@ -452,7 +452,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .without_content(%r{DEFAULT -m root -M daily})
                 .with_content(%r{DEVICESCAN -m root -M daily})
@@ -470,7 +470,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .with_content(%r{DEFAULT -m root -M daily})
             end
@@ -482,7 +482,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .without_content(%r{DEFAULT -m root -M daily})
                 .with_content(%r{DEVICESCAN -m root -M daily})
@@ -500,7 +500,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .with_content(%r{DEFAULT -m root -M daily -H})
             end
@@ -512,7 +512,7 @@ describe 'smartd', type: :class do
             end
 
             it do
-              it.is_expected.to contain_file('/etc/smartd.conf')
+              is_expected.to contain_file('/etc/smartd.conf')
                 .with_ensure('present')
                 .without_content(%r{DEFAULT -m root -M daily -H})
                 .with_content(%r{DEVICESCAN -m root -M daily -H})
@@ -525,7 +525,7 @@ describe 'smartd', type: :class do
           let(:params) { { default_options: [] } }
 
           it 'fails on type array' do
-            it.is_expected.to raise_error(Puppet::Error, %r{is not an Array..})
+            is_expected.to raise_error(Puppet::Error, %r{is not an Array..})
           end
         end
         # default_options is an array
@@ -599,7 +599,7 @@ describe 'smartd', type: :class do
       end
 
       it do
-        it.is_expected.to contain_file('/etc/smartd.conf')
+        is_expected.to contain_file('/etc/smartd.conf')
           .with_content(<<-ENDFILE.gsub(%r{^\s+}, ''))
             # Managed by Puppet -- do not edit!
             DEFAULT -m root -M daily
@@ -622,7 +622,7 @@ describe 'smartd', type: :class do
       end
 
       it do
-        it.is_expected.to contain_file('/etc/smartd.conf')
+        is_expected.to contain_file('/etc/smartd.conf')
           .with_content(<<-ENDFILE.gsub(%r{^\s+}, ''))
             # Managed by Puppet -- do not edit!
             DEFAULT -m root -M daily
@@ -646,7 +646,7 @@ describe 'smartd', type: :class do
       end
 
       it do
-        it.is_expected.to contain_file('/etc/smartd.conf')
+        is_expected.to contain_file('/etc/smartd.conf')
           .with_content(<<-ENDFILE.gsub(%r{^\s+}, ''))
             # Managed by Puppet -- do not edit!
             DEFAULT -m root -M daily
@@ -676,11 +676,11 @@ describe 'smartd', type: :class do
       end
 
       it do
-        it.is_expected.to contain_class('smartd')
-        it.is_expected.to contain_class('smartd::params')
-        it.is_expected.to contain_package('smartmontools')
-        it.is_expected.to contain_service('smartd')
-        it.is_expected.to contain_file('/etc/smartd.conf')
+        is_expected.to contain_class('smartd')
+        is_expected.to contain_class('smartd::params')
+        is_expected.to contain_package('smartmontools')
+        is_expected.to contain_service('smartd')
+        is_expected.to contain_file('/etc/smartd.conf')
           .with_content(<<-ENDFILE.gsub(%r{^\s+}, ''))
             # Managed by Puppet -- do not edit!
             DEFAULT -m root -M daily

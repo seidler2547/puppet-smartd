@@ -28,8 +28,7 @@ describe 'smartd::params', type: :class do
     end
 
     it 'fails on unsupported OS' do
-      expect { it.is_expected.to contain_class('smartd::params') }
-        .to raise_error(Puppet::Error, %r{not supported on Solaris})
+      is_expected.to compile.and_raise_error(%r{not supported on Solaris})
     end
   end
 end

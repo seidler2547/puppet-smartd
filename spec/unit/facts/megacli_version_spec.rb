@@ -5,38 +5,35 @@ describe 'megacli_version', type: :fact do
 
   context 'when megacli fact not set' do
     it 'fact returns nil' do
-      Facter.fact(:megacli).stubs(:value).returns(nil)
+      allow(Facter.fact(:megacli)).to receive(:value).and_return(nil)
       expect(Facter.fact(:megacli_version).value).to be_nil
     end
   end
 
   context 'when megacli fact is broken' do
     it 'fact returns nil' do
-      Facter.fact(:megacli).stubs(:value).returns('foobar')
+      allow(Facter.fact(:megacli)).to receive(:value).and_return('foobar')
       expect(Facter.fact(:megacli_version).value).to be_nil
     end
   end
 
   context 'when megacli fact is working' do
     it 'returns the version string using modern binary' do
-      Facter.fact(:megacli).stubs(:value).returns('/usr/bin/MegaCli')
-      Facter::Util::Resolution
-        .stubs(:exec)
+      allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
+      allow(Facter::Util::Resolution).to receive(:exec)
         .with('/usr/bin/MegaCli -Version -Cli -aALL -NoLog')
-        .returns(File.read(fixtures('megacli', 'version-cli-aall-8.07.07')))
+        .and_return(File.read(fixtures('megacli', 'version-cli-aall-8.07.07')))
       expect(Facter.fact(:megacli_version).value).to eq('8.07.07')
     end
 
     it 'returns the version string using legacy binary' do
-      Facter.fact(:megacli).stubs(:value).returns('/usr/bin/MegaCli')
-      Facter::Util::Resolution
-        .stubs(:exec)
+      allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
+      allow(Facter::Util::Resolution).to receive(:exec)
         .with('/usr/bin/MegaCli -Version -Cli -aALL -NoLog')
-        .returns(File.read(fixtures('megacli', 'invalid-input-8.00.11')))
-      Facter::Util::Resolution
-        .stubs(:exec)
+        .and_return(File.read(fixtures('megacli', 'invalid-input-8.00.11')))
+      allow(Facter::Util::Resolution).to receive(:exec)
         .with('/usr/bin/MegaCli -v -aALL -NoLog')
-        .returns(File.read(fixtures('megacli', 'version-aall-8.00.11')))
+        .and_return(File.read(fixtures('megacli', 'version-aall-8.00.11')))
       expect(Facter.fact(:megacli_version).value).to eq('8.00.11')
     end
   end

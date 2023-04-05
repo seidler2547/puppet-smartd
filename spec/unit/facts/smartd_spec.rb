@@ -5,14 +5,14 @@ describe 'smartd', type: :fact do
 
   context 'when smartd not in path' do
     it do
-      Facter::Util::Resolution.stubs(:which).with('smartd').returns(nil)
+      allow(Facter::Util::Resolution).to receive(:which).with('smartd').and_return(nil)
       expect(Facter.fact(:smartd).value).to be_nil
     end
   end
 
   context 'when smartd in path' do
     it do
-      Facter::Util::Resolution.stubs(:which).with('smartd').returns('/usr/sbin/smartd')
+      allow(Facter::Util::Resolution).to receive(:which).with('smartd').and_return('/usr/sbin/smartd')
       expect(Facter.fact(:smartd).value).to eq('/usr/sbin/smartd')
     end
   end
