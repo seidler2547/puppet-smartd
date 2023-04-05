@@ -17,12 +17,12 @@ class smartd::params {
   $service_ensure     = 'running'
   $manage_service     = true
   $devicescan         = true
-  $devicescan_options = undef
+  $devicescan_options = ''
   $devices            = []
   $mail_to            = 'root'
   $warning_schedule   = 'daily' # other choices: once, diminishing, exec
-  $exec_script        = false
-  $default_options    = undef
+  $exec_script        = undef
+  $default_options    = ''
 
   $version_string = $::smartmontools_version ? {
     undef   => '0.0',

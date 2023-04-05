@@ -6,7 +6,7 @@ describe 'smartd', type: :class do
     config_file = (values && values[:config_file]) ? values[:config_file] : '/etc/smartd.conf'
     group = (values && values[:group]) ? values[:group] : 'root'
 
-    it { is_expected.to contain_package('smartmontools').with_ensure('present') }
+    it { is_expected.to contain_package('smartmontools').with_ensure('installed') }
 
     it 'contains the configuration file with the parameters set appropriately' do
       expect(subject).to contain_file(config_file).with(
@@ -132,7 +132,7 @@ describe 'smartd', type: :class do
       describe 'ensure => present' do
         let(:params) { { ensure: 'present' } }
 
-        it { is_expected.to contain_package('smartmontools').with_ensure('present') }
+        it { is_expected.to contain_package('smartmontools').with_ensure('installed') }
         it { is_expected.to contain_service('smartd').with_ensure('running').with_enable(true) }
         it { is_expected.to contain_service('smartd').with_subscribe('File[/etc/smartd.conf]') }
       end
@@ -161,18 +161,10 @@ describe 'smartd', type: :class do
         it { is_expected.to contain_file('/etc/smartd.conf').with_ensure('absent') }
       end
 
-      describe 'ensure => badvalue' do
-        let(:params) { { ensure: 'badvalue' } }
-
-        it 'fails with unsupported value' do
-          is_expected.to compile.and_raise_error(%r{validate_re(): "badvalue" does not match})
-        end
-      end
-
       describe 'service_ensure => running' do
         let(:params) { { service_ensure: 'running' } }
 
-        it { is_expected.to contain_package('smartmontools').with_ensure('present') }
+        it { is_expected.to contain_package('smartmontools').with_ensure('installed') }
 
         it { is_expected.to contain_service('smartd').with_ensure('running').with_enable(true) }
       end
@@ -180,7 +172,7 @@ describe 'smartd', type: :class do
       describe 'service_ensure => stopped' do
         let(:params) { { service_ensure: 'stopped' } }
 
-        it { is_expected.to contain_package('smartmontools').with_ensure('present') }
+        it { is_expected.to contain_package('smartmontools').with_ensure('installed') }
 
         it { is_expected.to contain_service('smartd').with_ensure('stopped').with_enable(false) }
       end
@@ -189,14 +181,6 @@ describe 'smartd', type: :class do
         let(:params) { { manage_service: false } }
 
         it { is_expected.not_to contain_service('smartd') }
-      end
-
-      describe 'service_ensure => badvalue' do
-        let(:params) { { service_ensure: 'badvalue' } }
-
-        it 'fails with unexpected value' do
-          is_expected.to compile.and_raise_error(%r{validate_re(): "badvalue" does not match})
-        end
       end
 
       describe 'devicescan =>' do
@@ -242,14 +226,6 @@ describe 'smartd', type: :class do
           end
         end
         # devicescan = false
-
-        context 'when value is "foo"' do
-          let(:params) { { devicescan: 'foo' } }
-
-          it 'fails because of non-boolean' do
-            is_expected.to compile.and_raise_error(%r{is not a boolean..})
-          end
-        end
       end
       # devicescan
 
@@ -362,14 +338,6 @@ describe 'smartd', type: :class do
         end
       end
 
-      describe 'warning_schedule => badvalue' do
-        let(:params) { { warning_schedule: 'badvalue' } }
-
-        it 'fails on badvalue' do
-          is_expected.to compile.and_raise_error(%r{$warning_schedule must be either daily, once, diminishing, or exec.})
-        end
-      end
-
       describe 'enable_default =>' do
         context 'when using default value' do
           context 'with fact smartmontool_version = "5.43"' do
@@ -417,14 +385,6 @@ describe 'smartd', type: :class do
               .with_ensure('present')
               .without_content(%r{DEFAULT -m root -M daily})
               .with_content(%r{DEVICESCAN -m root -M daily})
-          end
-        end
-
-        context 'when value is "foo"' do
-          let(:params) { { enable_default: 'foo' } }
-
-          it 'fails on non-boolean' do
-            is_expected.to compile.and_raise_error(%r{is not a boolean..})
           end
         end
       end
@@ -520,15 +480,6 @@ describe 'smartd', type: :class do
           end
         end
         # default_options is "-H"
-
-        context 'when []' do
-          let(:params) { { default_options: [] } }
-
-          it 'fails on type array' do
-            is_expected.to raise_error(Puppet::Error, %r{is not an Array..})
-          end
-        end
-        # default_options is an array
       end
       # default_options
     end

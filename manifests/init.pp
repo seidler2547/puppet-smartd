@@ -61,46 +61,33 @@
 #   `DEFAULT` directive.
 #
 class smartd (
-  $ensure             = 'present',
-  $package_name       = $smartd::params::package_name,
-  $service_name       = $smartd::params::service_name,
-  $service_ensure     = $smartd::params::service_ensure,
-  $manage_service     = $smartd::params::manage_service,
-  $config_file        = $smartd::params::config_file,
-  $devicescan         = $smartd::params::devicescan,
-  $devicescan_options = $smartd::params::devicescan_options,
-  $devices            = $smartd::params::devices,
-  $mail_to            = $smartd::params::mail_to,
-  $warning_schedule   = $smartd::params::warning_schedule,
-  $exec_script        = $smartd::params::exec_script,
-  $enable_default     = $smartd::params::enable_default,
-  $default_options    = $smartd::params::default_options,
+  Smartd::Ensure             $ensure = 'present',
+  String[1]                  $package_name = $smartd::params::package_name,
+  String[1]                  $service_name = $smartd::params::service_name,
+  Enum['running', 'stopped'] $service_ensure = $smartd::params::service_ensure,
+  Boolean                    $manage_service = $smartd::params::manage_service,
+  Stdlib::Absolutepath       $config_file = $smartd::params::config_file,
+  Boolean                    $devicescan = $smartd::params::devicescan,
+  String                     $devicescan_options = $smartd::params::devicescan_options,
+  Array[Hash]                $devices = $smartd::params::devices,
+  String                     $mail_to = $smartd::params::mail_to,
+  Smartd::Warning_schedule   $warning_schedule = $smartd::params::warning_schedule,
+  Optional[String]           $exec_script = $smartd::params::exec_script,
+  Boolean                    $enable_default = $smartd::params::enable_default,
+  String                     $default_options = $smartd::params::default_options,
 ) inherits smartd::params {
-  validate_re($ensure, '^present$|^latest$|^absent$|^purged$')
-  validate_string($package_name)
-  validate_string($service_name)
-  validate_re($service_ensure, '^running$|^stopped$')
-  validate_string($config_file)
-  validate_bool($devicescan)
-  validate_string($devicescan_options)
-  validate_array($devices)
-  validate_string($mail_to)
-  validate_re($warning_schedule, '^daily$|^once$|^diminishing$|^exec$',
-    '$warning_schedule must be either daily, once, diminishing, or exec.')
   if $warning_schedule == 'exec' {
-    if $exec_script == false {
+    if $exec_script =~ Undef {
       fail('$exec_script must be set when $warning_schedule is set to exec.')
     }
     $real_warning_schedule = "${warning_schedule} ${exec_script}"
   }
   else {
-    if $exec_script != false {
+    if $exec_script !~ Undef {
       fail('$exec_script should not be used when $warning_schedule is not set to exec.')
     }
     $real_warning_schedule = $warning_schedule
   }
-  validate_bool($enable_default)
-  validate_string($default_options)
 
   case $ensure {
     'present', 'latest': {
@@ -116,9 +103,6 @@ class smartd (
       $svc_enable  = false
       $file_ensure = 'absent'
       $srv_manage  = false
-    }
-    default: {
-      fail("unsupported value of \$ensure: ${ensure}")
     }
   }
 
