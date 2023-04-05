@@ -69,14 +69,13 @@ describe 'megaraid_virtual_drives', type: :fact do
           blockdevice_sdk_model: 'PRAID EP400i',
           blockdevice_sdk_size: '299439751168',
           blockdevice_sdk_vendor: 'FTS',
-          blockdevices: 'sda,sdb,sdc,sdd,sde,sdf,sdg,sdh,sdi,sdj,sdk',
         }
 
-        # stolen from rspec-puppet
         facts.each { |k, v| Facter.add(k) { setcode { v } } }
       end
 
       it do
+        allow(Facter.fact(:blockdevices)).to receive(:value).and_return('sda,sdb,sdc,sdd,sde,sdf,sdg,sdh,sdi,sdj,sdk')
         allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
         allow(Facter.fact(:megacli)).to receive(:value).and_return('/usr/bin/MegaCli')
         allow(Facter.fact(:megaraid_adapters)).to receive(:value).and_return('1')
