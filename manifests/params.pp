@@ -24,8 +24,8 @@ class smartd::params {
   $exec_script        = undef
   $default_options    = ''
 
-  $version_string = $::smartmontools_version ? {
-    undef   => '0.0',
+  $version_string = defined('$::smartmontools_version') ? {
+    false   => '0.0',
     default => $::smartmontools_version,
   }
 
@@ -49,7 +49,7 @@ class smartd::params {
           /10|11|12|13|14|15|16|17|18/ => '/etc/smartd.conf',
           default                      => '/etc/smartmontools/smartd.conf',
         },
-        /RedHat|CentOS|Scientific|SLC|OracleLinux|OEL/ => $::operatingsystemmajrelease ? {
+        /RedHat|CentOS|Scientific|SLC|OracleLinux|OEL|Rocky|AlmaLinux/ => $::operatingsystemmajrelease ? {
           /4|5|6/ => '/etc/smartd.conf',
           default => '/etc/smartmontools/smartd.conf',
         },
