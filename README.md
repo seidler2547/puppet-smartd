@@ -7,15 +7,15 @@ Puppet smartd Module
 
 1. [Overview](#overview)
 2. [Description](#description)
+   * [Forked](#forked)
 3. [Usage](#usage)
-    * [Version `2.x.x` _incompatible_ API change](#version-2xx-incompatible-api-change)
-    * [Simple Usage](#simple-usage)
-    * [Parameters](#parameters)
-    * [Pedantic Example](#pedantic-example)
-    * [Hiera Data Bindings](#hiera-data-bindings)
-    * [Facts](#facts)
+   * [Simple Usage](#simple-usage)
+   * [Parameters](#parameters)
+   * [Pedantic Example](#pedantic-example)
+   * [Hiera Data Bindings](#hiera-data-bindings)
+   * [Facts](#facts)
 4. [Limitations](#limitations)
-    * [Tested Platforms](#tested-platforms)
+   * [Tested Platforms](#tested-platforms)
 5. [Versioning](#versioning)
 6. [Support](#support)
 7. [See Also](#see-also)
@@ -71,41 +71,6 @@ API changes have been made to improve usage.
 
 Usage
 -----
-
-### Version `2.x.x` _incompatible_ API change
-
-The `v2` API merges the `v1` API's `devices` and `device_options` parameters
-into a single parameter named `devices`, but with incompatible semantics to the
-`v1` API.
-
-`devices` now accepts an `Array` of `Hash`.  This is to allow multiple
-`smartd.conf` entries for the same blockdev as is typically required for probing
-through to individual disks behind a block device presented by a RAID
-controller.
-
-#### Old `v1` API
-
-Note that `devices` used to accept a flat `Array`.
-
-```puppet
-    class{ 'smartd':
-      devices        => [ '/dev/sg1', '/dev/sg2' ],
-      device_options => { '/dev/sg1' => '-o on -S on -a', '/dev/sg2' => '-o on -S on -a' },
-    }
-```
-
-#### New `v2` API
-
-`devices` now accepts an `Array` of `Hash`.
-
-```puppet
-    class{ 'smartd':
-      devices => [
-        { device => '/dev/sg1', options => '-o on -S on -a' },
-        { device => '/dev/sg2', options => '-o on -S on -a' },
-      ],
-    }
-```
 
 ### Simple Usage
 
