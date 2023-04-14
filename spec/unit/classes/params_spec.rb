@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'smartd::params', type: :class do
   shared_examples 'osfamily' do |family|
-    let(:facts) { { osfamily: family } }
+    let(:facts) { { os: { family: family } } }
 
     it { is_expected.to contain_class('smartd::params') }
   end
@@ -22,8 +22,10 @@ describe 'smartd::params', type: :class do
   describe 'unsupported osfamily' do
     let :facts do
       {
-        osfamily: 'Solaris',
-        operatingsystem: 'Solaris',
+        os: {
+          family: 'Solaris',
+          name: 'Solaris',
+        },
       }
     end
 
