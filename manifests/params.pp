@@ -26,7 +26,7 @@ class smartd::params {
 
   $version_string = defined('$::smartmontools_version') ? {
     false   => '0.0',
-    default => $::smartmontools_version,
+    default => $facts['smartmontools_version'],
   }
 
   # smartd.conf < 5.43 does not support the 'DEFAULT' directive
@@ -36,24 +36,24 @@ class smartd::params {
     $enable_default = false
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'FreeBSD': {
       $config_file = '/usr/local/etc/smartd.conf'
       $service_name = 'smartd'
     }
     'RedHat': {
-      $config_file = $::operatingsystem ? {
+      $config_file = $facts['os']['name'] ? {
         # lint:ignore:80chars
-        'Fedora'                                       => $::operatingsystemrelease ? {
+        'Fedora'                                                       => $facts['os']['release']['major'] ? {
           # No, I am not going to support versions 1-9.
           /10|11|12|13|14|15|16|17|18/ => '/etc/smartd.conf',
           default                      => '/etc/smartmontools/smartd.conf',
         },
-        /RedHat|CentOS|Scientific|SLC|OracleLinux|OEL|Rocky|AlmaLinux/ => $::operatingsystemmajrelease ? {
+        /RedHat|CentOS|Scientific|SLC|OracleLinux|OEL|Rocky|AlmaLinux/ => $facts['os']['release']['major'] ? {
           /4|5|6/ => '/etc/smartd.conf',
           default => '/etc/smartmontools/smartd.conf',
         },
-        default                                        => '/etc/smartd.conf',
+        default                                                        => '/etc/smartd.conf',
         # lint:endignore
       }
       $service_name = 'smartd'
@@ -67,7 +67,7 @@ class smartd::params {
       $service_name = 'smartmontools'
     }
     default: {
-      fail("Module ${module_name} is not supported on ${::operatingsystem}")
+      fail("Module ${module_name} is not supported on ${facts['os']['name']}")
     }
   }
 }

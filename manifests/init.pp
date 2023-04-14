@@ -104,6 +104,7 @@ class smartd (
       $file_ensure = 'absent'
       $srv_manage  = false
     }
+    default: {}
   }
 
   ensure_packages([$package_name], { ensure => $pkg_ensure })
@@ -123,7 +124,7 @@ class smartd (
   file { $config_file:
     ensure  => $file_ensure,
     owner   => 'root',
-    group   => $::gid,
+    group   => 0,
     mode    => '0644',
     content => template('smartd/smartd.conf'),
     require => Package[$package_name],
@@ -131,7 +132,7 @@ class smartd (
 
   # Special sauce for Debian where it's not enough for the rc script
   # to be enabled, it also needs its own extra special config file.
-  if $::osfamily == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     $debian_augeas_changes = $svc_enable ? {
       false   => 'remove start_smartd',
       default => 'set start_smartd "yes"',
