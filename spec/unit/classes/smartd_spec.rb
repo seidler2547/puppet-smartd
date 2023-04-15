@@ -249,7 +249,7 @@ describe 'smartd', type: :class do
         it 'contains file /etc/smartd.conf with contents ...' do
           verify_contents(catalogue, '/etc/smartd.conf', [
                             'DEFAULT -m root -M daily',
-                            'DEVICESCAN somevalue'
+                            'DEVICESCAN somevalue',
                           ])
         end
       end
@@ -259,7 +259,7 @@ describe 'smartd', type: :class do
           {
             'devices' => [
               { 'device' => '/dev/sg1' },
-              { 'device' => '/dev/sg2' }
+              { 'device' => '/dev/sg2' },
             ],
           }
         end
@@ -270,7 +270,7 @@ describe 'smartd', type: :class do
           verify_contents(catalogue, '/etc/smartd.conf', [
                             'DEFAULT -m root -M daily',
                             '/dev/sg1',
-                            '/dev/sg2'
+                            '/dev/sg2',
                           ])
         end
       end
@@ -280,7 +280,7 @@ describe 'smartd', type: :class do
           {
             'devices' => [
               { 'device' => '/dev/sg1', 'options' => '-o on -S on -a' },
-              { 'device' => '/dev/sg2', 'options' => '-o on -S on -a' }
+              { 'device' => '/dev/sg2', 'options' => '-o on -S on -a' },
             ],
           }
         end
@@ -291,7 +291,7 @@ describe 'smartd', type: :class do
           verify_contents(catalogue, '/etc/smartd.conf', [
                             'DEFAULT -m root -M daily',
                             '/dev/sg1 -o on -S on -a',
-                            '/dev/sg2 -o on -S on -a'
+                            '/dev/sg2 -o on -S on -a',
                           ])
         end
       end
@@ -305,7 +305,7 @@ describe 'smartd', type: :class do
               { 'device' => '/dev/cciss/c0d0', 'options' => '-d cciss,2 -a -o on -S on' },
               { 'device' => '/dev/cciss/c0d0', 'options' => '-d cciss,3 -a -o on -S on' },
               { 'device' => '/dev/cciss/c0d0', 'options' => '-d cciss,4 -a -o on -S on' },
-              { 'device' => '/dev/cciss/c0d0', 'options' => '-d cciss,5 -a -o on -S on' }
+              { 'device' => '/dev/cciss/c0d0', 'options' => '-d cciss,5 -a -o on -S on' },
 
             ],
           }
@@ -321,7 +321,7 @@ describe 'smartd', type: :class do
                             '/dev/cciss/c0d0 -d cciss,2 -a -o on -S on',
                             '/dev/cciss/c0d0 -d cciss,3 -a -o on -S on',
                             '/dev/cciss/c0d0 -d cciss,4 -a -o on -S on',
-                            '/dev/cciss/c0d0 -d cciss,5 -a -o on -S on'
+                            '/dev/cciss/c0d0 -d cciss,5 -a -o on -S on',
                           ])
         end
       end
@@ -333,7 +333,7 @@ describe 'smartd', type: :class do
 
         it 'contains file /etc/smartd.conf with contents ...' do
           verify_contents(catalogue, '/etc/smartd.conf', [
-                            'DEFAULT -m someguy@localdomain -M daily'
+                            'DEFAULT -m someguy@localdomain -M daily',
                           ])
         end
       end
@@ -345,7 +345,7 @@ describe 'smartd', type: :class do
 
         it 'contains file /etc/smartd.conf with contents ...' do
           verify_contents(catalogue, '/etc/smartd.conf', [
-                            'DEFAULT -m root -M diminishing'
+                            'DEFAULT -m root -M diminishing',
                           ])
         end
       end
