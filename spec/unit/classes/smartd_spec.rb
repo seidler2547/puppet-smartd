@@ -139,7 +139,18 @@ describe 'smartd', type: :class do
 
   describe 'on a supported osfamily, custom parameters' do
     describe 'for osfamily RedHat' do
-      let(:facts) { { os: { family: 'RedHat' }, smartmontools_version: '5.43' } }
+      let(:facts) do
+        {
+          os: {
+            family: 'RedHat',
+            name: 'RedHat',
+            release: {
+              major: '6',
+            },
+          },
+          smartmontools_version: '5.43',
+        }
+      end
 
       describe 'ensure => present' do
         let(:params) { { ensure: 'present' } }
@@ -499,49 +510,49 @@ describe 'smartd', type: :class do
     describe 'for osfamily Debian' do
       let(:facts) { { os: { family: 'Debian' }, smartmontools_version: '5.43' } }
 
-      describe 'ensure => present' do
+      context 'with ensure => present' do
         let(:params) { { ensure: 'present' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('set start_smartd "yes"') }
       end
 
-      describe 'ensure => latest' do
+      context 'with ensure => latest' do
         let(:params) { { ensure: 'latest' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('set start_smartd "yes"') }
       end
 
-      describe 'ensure => absent' do
+      context 'with ensure => absent' do
         let(:params) { { ensure: 'absent' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('remove start_smartd') }
       end
 
-      describe 'ensure => purged' do
+      context 'with ensure => purged' do
         let(:params) { { ensure: 'purged' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('remove start_smartd') }
       end
 
-      describe 'ensure => absent and service_ensure => running' do
+      context 'with ensure => absent and service_ensure => running' do
         let(:params) { { ensure: 'absent', service_ensure: 'running' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('remove start_smartd') }
       end
 
-      describe 'ensure => purged and service_ensure => running' do
+      context 'with ensure => purged and service_ensure => running' do
         let(:params) { { ensure: 'purged', service_ensure: 'running' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('remove start_smartd') }
       end
 
-      describe 'service_ensure => running' do
+      context 'with service_ensure => running' do
         let(:params) { { service_ensure: 'running' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('set start_smartd "yes"') }
       end
 
-      describe 'service_ensure => stopped' do
+      context 'with service_ensure => stopped' do
         let(:params) { { service_ensure: 'stopped' } }
 
         it { is_expected.to contain_augeas('shell_config_start_smartd').with_changes('remove start_smartd') }
@@ -550,17 +561,28 @@ describe 'smartd', type: :class do
   end
 
   describe 'megaraid support' do
+    let(:facts) do
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: {
+            major: '6',
+          },
+        },
+        megaraid_adapters: '1',
+        megaraid_virtual_drives: 'sdb,sda',
+        smartmontools_version: '5.43',
+      }
+    end
+
     describe 'without params + megaraid sata facts' do
       let(:facts) do
-        {
-          os: {
-            family: 'RedHat',
+        super().merge(
+          {
+            megaraid_physical_drives_sata: '2,1',
           },
-          megaraid_adapters: '1',
-          megaraid_virtual_drives: 'sdb,sda',
-          megaraid_physical_drives_sata: '2,1',
-          smartmontools_version: '5.43',
-        }
+        )
       end
 
       it do
@@ -577,15 +599,11 @@ describe 'smartd', type: :class do
 
     describe 'without params + megaraid sas facts' do
       let(:facts) do
-        {
-          os: {
-            family: 'RedHat',
+        super().merge(
+          {
+            megaraid_physical_drives_sas: '2,1',
           },
-          megaraid_adapters: '1',
-          megaraid_virtual_drives: 'sdb,sda',
-          megaraid_physical_drives_sas: '2,1',
-          smartmontools_version: '5.43',
-        }
+        )
       end
 
       it do
@@ -602,16 +620,12 @@ describe 'smartd', type: :class do
 
     describe 'without params + megaraid sata+sas facts' do
       let(:facts) do
-        {
-          os: {
-            family: 'RedHat',
+        super().merge(
+          {
+            megaraid_physical_drives_sas: '1,2',
+            megaraid_physical_drives_sata: '3,4',
           },
-          megaraid_adapters: '1',
-          megaraid_virtual_drives: 'sdb,sda',
-          megaraid_physical_drives_sas: '1,2',
-          megaraid_physical_drives_sata: '3,4',
-          smartmontools_version: '5.43',
-        }
+        )
       end
 
       it do
@@ -630,15 +644,11 @@ describe 'smartd', type: :class do
 
     describe 'with params + megaraid facts' do
       let(:facts) do
-        {
-          os: {
-            family: 'RedHat',
+        super().merge(
+          {
+            megaraid_physical_drives_sata: '2,1',
           },
-          megaraid_adapters: '1',
-          megaraid_virtual_drives: 'sdb,sda',
-          megaraid_physical_drives_sata: '2,1',
-          smartmontools_version: '5.43',
-        }
+        )
       end
       let(:params) do
         {

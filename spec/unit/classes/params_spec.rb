@@ -8,6 +8,19 @@ describe 'smartd::params', type: :class do
   end
 
   describe 'for osfamily RedHat' do
+    let(:facts) do
+      super().merge(
+        {
+          os: {
+            name: 'RedHat',
+            release: {
+              major: '6',
+            },
+          },
+        },
+      )
+    end
+
     it_behaves_like 'osfamily', 'RedHat'
   end
 

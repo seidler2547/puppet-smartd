@@ -7,6 +7,9 @@ describe 'megacli', type: :fact do
     context 'with megacli not in path' do
       let(:facts) do
         {
+          os: {
+            family: 'Debian',
+          },
           kernel: 'Linux',
         }
       end
